@@ -1,4 +1,4 @@
-package com.academia.book;
+package com.academia.model;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
