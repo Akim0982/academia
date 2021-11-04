@@ -4,6 +4,7 @@ package com.academia.controller;
 import com.academia.model.Author;
 import com.academia.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/test/authors")
+@RequestMapping("/api/authors")
 public class AuthorController {
 
     private final AuthorRepository authorRepository;
@@ -22,7 +23,7 @@ public class AuthorController {
         this.authorRepository = authorRepository;
     }
 
-    @GetMapping("")
+    @GetMapping()
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
@@ -33,21 +34,23 @@ public class AuthorController {
 
     }
 
+    @Transactional
     @PostMapping()
     public Author addNewAuthor(@RequestBody Author author) {
         authorRepository.save(author);
         return author;
     }
 
+    @Transactional
     @PutMapping()
-    public Author updateAuthor(@RequestBody Author theAuthor) {
-        authorRepository.save(theAuthor);
-        return theAuthor;
+    public Author updateAuthor(@RequestBody Author author) {
+        authorRepository.save(author);
+        return author;
     }
 
+    @Transactional
     @DeleteMapping("{authorId}")
-    public String deleteAuthor(@PathVariable Integer authorId) {
+    public void deleteAuthor(@PathVariable Integer authorId) {
         authorRepository.deleteById(authorId);
-        return "Delete Author Id - " + authorId;
     }
 }
