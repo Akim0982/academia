@@ -2,55 +2,53 @@ package com.academia.controller;
 
 
 import com.academia.model.Author;
-import com.academia.repository.AuthorRepository;
+import com.academia.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
 @RequestMapping("/api/authors")
 public class AuthorController {
 
-    private final AuthorRepository authorRepository;
+    private final AuthorService authorService;
 
     @Autowired
-    public AuthorController(AuthorRepository authorRepository) {
-
-        this.authorRepository = authorRepository;
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<Author> findAll() {
-        return authorRepository.findAll();
+        return authorService.findAll();
     }
 
     @GetMapping("{authorId}")
-    public Optional<Author> getById(@PathVariable int authorId) {
-        return authorRepository.findById(authorId);
-
+    public void getById(@PathVariable Integer authorId) throws Exception {
+        if (authorId == 0) {
+            throw new Exception();
+        }
+        authorService.findById(authorId);
     }
 
-    @Transactional
     @PostMapping()
     public Author addNewAuthor(@RequestBody Author author) {
-        authorRepository.save(author);
+        authorService.save(author);
         return author;
     }
 
     @Transactional
-    @PutMapping()
+    @PutMapping
     public Author updateAuthor(@RequestBody Author author) {
-        authorRepository.save(author);
+        authorService.save(author);
         return author;
     }
 
-    @Transactional
     @DeleteMapping("{authorId}")
     public void deleteAuthor(@PathVariable Integer authorId) {
-        authorRepository.deleteById(authorId);
+        authorService.deleteAuthor(authorId);
     }
 }

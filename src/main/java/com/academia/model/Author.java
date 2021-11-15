@@ -10,7 +10,7 @@ public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String firstName;
     private String lastName;
@@ -18,13 +18,13 @@ public class Author {
     public Author() {
     }
 
-    public Author(Integer id, String firstName, String lastName) {
+    public Author(Long id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -36,7 +36,7 @@ public class Author {
         return this.lastName;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

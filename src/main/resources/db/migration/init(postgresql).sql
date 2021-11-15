@@ -1,12 +1,12 @@
 CREATE TABLE author
 (
-    id SERIAL PRIMARY KEY,
-    firstName CHARACTER VARYING(100),
-    lastName CHARACTER VARYING(100)
+    id BIGSERIAL PRIMARY KEY,
+    first_name CHARACTER VARYING (255) NOT NULL,
+    last_name CHARACTER VARYING (255) NOT NULL
 );
 
-INSERT INTO author (id, firstname, lastname)
-VALUES
+insert into author (id, first_name, last_name)
+values
 (1, 'Михаил', 'Лермонтов'),
 (2, 'Лев', 'Толстой'),
 (3, 'Александр', 'Пушкин'),
@@ -14,19 +14,19 @@ VALUES
 (5, 'Николай', 'Гумилев');
 
 
-CREATE TABLE book (
-  id SERIAL PRIMARY KEY,
-  title CHARACTER VARYING(100),
-  price INTEGER,
-  imageUrl VARCHAR(100),
-  createdAt date,
-  updatedAt date,
-  author_id INTEGER,
+create table book (
+  id BIGSERIAL CONSTRAINT fk_author_id PRIMARY KEY,
+  title CHARACTER VARYING (255),
+  price NUMERIC (19,2),
+  image_url CHARACTER VARYING (255),
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  author_id INTEGER NOT NULL,
   FOREIGN KEY (author_id) REFERENCES author(id)
 );
 
-INSERT INTO book (id, title, price, imageurl, createdat, updatedat, author_id)
-VALUES
+insert into book (id, title, price, image_url, created_at, updated_at, author_id)
+values
 (1, 'Мцыри', 100, 'www', '1995-02-01', '2011-02-05', 1),
 (2, 'Война и мир', 200, 'ccc', '1996-02-01', '2021-02-05', 2),
 (3, 'Руслан и Людмила', 150, 'qqq', '1997-02-01', '2012-02-05', 3),

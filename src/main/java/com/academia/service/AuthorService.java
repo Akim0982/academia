@@ -9,6 +9,8 @@ import java.util.List;
 @Service
 public class AuthorService {
 
+    public AuthorService() {
+    }
 
     public AuthorRepository repository;
 
@@ -27,5 +29,4 @@ public class AuthorService {
     public void deleteAuthor(Integer id) {
         repository.deleteById(id);
     }
-
 }
