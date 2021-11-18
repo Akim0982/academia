@@ -36,5 +36,3 @@ out/
 ### VS Code ###
 .vscode/
 V1__create-schema.sql
-Book.java
-BookController.java
