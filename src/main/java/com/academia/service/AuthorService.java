@@ -9,24 +9,24 @@ import java.util.List;
 @Service
 public class AuthorService {
 
-    public AuthorService() {
+    private final AuthorRepository authorRepository;
+
+    public AuthorService(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
     }
-
-    public AuthorRepository repository;
-
     public Author findById(Integer id) throws Exception {
-        return repository.findById(id).orElseThrow(() -> new Exception("Author not found - " + id));
+        return authorRepository.findById(id).orElseThrow(() -> new Exception("Author not found - " + id));
     }
 
     public List<Author> findAll() {
-        return repository.findAll();
+        return authorRepository.findAll();
     }
 
     public Author save(Author author) {
-        return repository.save(author);
+        return authorRepository.save(author);
     }
 
     public void deleteAuthor(Integer id) {
-        repository.deleteById(id);
+        authorRepository.deleteById(id);
     }
 }
