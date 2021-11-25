@@ -3,11 +3,19 @@ package com.academia.controller;
 
 import com.academia.model.Author;
 import com.academia.service.AuthorService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,28 +35,23 @@ public class AuthorController {
     }
 
     @GetMapping("{authorId}")
-    public void getById(@PathVariable Integer authorId) throws Exception {
-        if (authorId == null) {
-            throw new NotFoundException("Author not found ");
-        }
-        authorService.findById(authorId);
+    public Author getById(@PathVariable Long authorId) {
+        return authorService.findById(authorId);
     }
 
-    @PostMapping()
-    public Author addNewAuthor(@RequestBody Author author) {
-        authorService.save(author);
-        return author;
+    @PostMapping
+    public Author create(@Valid @RequestBody Author author) {
+        return authorService.create(author);
     }
 
     @Transactional
-    @PutMapping
-    public Author updateAuthor(@RequestBody Author author) {
-        authorService.save(author);
-        return author;
+    @PutMapping("{authorId}")
+    public Author update(@RequestParam Long authorId, @RequestBody Author author) {
+        return authorService.update(authorId, author);
     }
 
     @DeleteMapping("{authorId}")
-    public void deleteAuthor(@PathVariable Integer authorId) {
-        authorService.deleteAuthor(authorId);
+    public void delete(@PathVariable Long authorId) {
+        authorService.delete(authorId);
     }
 }

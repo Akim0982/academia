@@ -1,8 +1,11 @@
 package com.academia.service;
 
+import com.academia.exception.ResourceNotFoundException;
+import com.academia.mapping.AuthorMapping;
 import com.academia.model.Author;
 import com.academia.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -10,23 +13,42 @@ import java.util.List;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final AuthorMapping authorMapping;
 
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, AuthorMapping authorMapping) {
         this.authorRepository = authorRepository;
+        this.authorMapping = authorMapping;
     }
-    public Author findById(Integer id) throws Exception {
-        return authorRepository.findById(id).orElseThrow(() -> new Exception("Author not found - " + id));
+
+    @Transactional(readOnly = true)
+    public Author findById(Long id) {
+        return authorRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Author not found - " + id));
     }
 
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
 
+    @Transactional
+    public Author create(Author author) {
+        return authorRepository.save(author);
+    }
+
+    @Transactional
     public Author save(Author author) {
         return authorRepository.save(author);
     }
 
-    public void deleteAuthor(Integer id) {
+    @Transactional
+    public Author update(Long id, Author author) {
+        Author existedAuthor = findById(id);
+        return authorRepository.save(authorMapping.mapping(author, existedAuthor));
+    }
+
+    @Transactional
+    public void delete(Long id) {
         authorRepository.deleteById(id);
     }
 }
