@@ -20,8 +20,75 @@ create table book
     CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES author (id)
 );
 
-DELETE FROM book.book WHERE (id = '7');
+CREATE TABLE users
+(
+    id       BIGINT       NOT NULL AUTO_INCREMENT,
+    email    VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
 
-INSERT INTO book.book
-    (id, title, price, image_url, created_at, updated_at, author_id)
-     VALUES ('7', 'Африка', '200', 'qqq', '2001-03-05', '2021-10-20', '1');
+ALTER TABLE `authordb`.`users`
+    ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE;
+
+ALTER TABLE `authordb`.`users`
+    ADD COLUMN `first_name` VARCHAR(255) NULL DEFAULT NULL AFTER `password`,
+    ADD COLUMN `last_name` VARCHAR(255) NULL DEFAULT NULL AFTER `first_name`,
+    ADD COLUMN `created_at` TIMESTAMP NULL DEFAULT NULL AFTER `last_name`,
+    ADD COLUMN `updated_at` TIMESTAMP NULL DEFAULT NULL AFTER `created_at`,
+    ADD COLUMN `role` VARCHAR(255) NOT NULL AFTER 'role';
+
+
+UPDATE `authordb`.`users`
+SET `email` = 'Ilya@mail.ru'
+WHERE (`id` = '1');
+UPDATE `authordb`.`users`
+SET `email` = 'Anton@mail.ru'
+WHERE (`id` = '2');
+UPDATE `authordb`.`users`
+SET `password` = '987654'
+WHERE (`id` = '1');
+UPDATE `authordb`.`users`
+SET `password` = '123456'
+WHERE (`id` = '2');
+
+
+CREATE TABLE roles
+(
+    id   BIGINT       NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE INDEX name_UNIQUE (name ASC) VISIBLE
+);
+
+INSERT INTO roles (name)
+VALUES ('ADMIN');
+INSERT INTO roles (name)
+VALUES ('MANAGER');
+INSERT INTO roles (name)
+VALUES ('USER');
+
+CREATE TABLE users_roles
+(
+    users_id BIGINT NOT NULL,
+    roles_id BIGINT NOT NULL
+);
+
+ALTER TABLE users_roles
+    ADD INDEX fk_users_idx (users_id ASC) VISIBLE,
+    ADD INDEX fk_roles_idx (roles_id ASC) VISIBLE;
+;
+ALTER TABLE users_roles
+    ADD CONSTRAINT fk_users
+        FOREIGN KEY (users_id)
+            REFERENCES users (id)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    ADD CONSTRAINT fk_roles
+        FOREIGN KEY (roles_id)
+            REFERENCES roles (id)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION;
+
+INSERT INTO users_roles (users_id, roles_id)
+VALUES ('1', '1');

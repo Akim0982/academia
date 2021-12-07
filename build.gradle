@@ -10,6 +10,14 @@ group = 'com.academia'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
 
 compileJava {
     options.compilerArgs += [
@@ -17,25 +25,26 @@ compileJava {
     ]
 }
 
-repositories {
-    mavenCentral()
-}
-
-ext {
-    set('snippetsDir', file("build/generated-snippets"))
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.liquibase:liquibase-core'
     implementation 'org.projectlombok:lombok:1.18.22'
     implementation 'org.jetbrains:annotations:22.0.0'
     implementation 'javax.validation:validation-api:2.0.1.Final'
-    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
     implementation "org.mapstruct:mapstruct:1.4.2.Final"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+    implementation 'io.jsonwebtoken:jjwt:0.2'
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs = [
+            '-Amapstruct.suppressGeneratorTimestamp=true'
+    ]
 }
 
 test {

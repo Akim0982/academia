@@ -29,6 +29,6 @@ public class Book {
     private Date updatedAt;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "authorId")
     private Author author;
 }

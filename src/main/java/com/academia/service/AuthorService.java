@@ -37,11 +37,6 @@ public class AuthorService {
     }
 
     @Transactional
-    public Author save(Author author) {
-        return authorRepository.save(author);
-    }
-
-    @Transactional
     public Author update(Long id, Author author) {
         Author existedAuthor = findById(id);
         return authorRepository.save(authorMapping.mapping(author, existedAuthor));
