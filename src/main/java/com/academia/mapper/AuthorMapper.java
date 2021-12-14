@@ -5,7 +5,7 @@ import com.academia.model.Author;
 import org.mapstruct.Mapper;
 
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AuthorMapper {
 
     AuthorDto authorDto(Author author);

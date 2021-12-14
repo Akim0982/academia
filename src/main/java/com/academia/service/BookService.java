@@ -2,7 +2,6 @@ package com.academia.service;
 
 import com.academia.exception.ResourceNotFoundException;
 import com.academia.mapping.BookMapping;
-import com.academia.model.Author;
 import com.academia.model.Book;
 import com.academia.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +37,7 @@ public class BookService {
     }
 
     @Transactional
-    public Book save(Book book) {
-        Book existedBook = findById(book.getId());
-        Author author = authorService.findById(book.getAuthor().getId());
-        existedBook.setTitle(book.getTitle());
-        existedBook.setImageUrl(book.getImageUrl());
-        existedBook.setPrice(book.getPrice());
-        existedBook.setCreatedAt(book.getCreatedAt());
-        existedBook.setUpdatedAt(book.getUpdatedAt());
+    public Book create(Book book) {
         return bookRepository.save(book);
     }
 
@@ -59,5 +51,4 @@ public class BookService {
     public void delete(Long id) {
         bookRepository.deleteById(id);
     }
-
 }

@@ -33,10 +33,10 @@ ALTER TABLE `authordb`.`users`
 
 ALTER TABLE `authordb`.`users`
     ADD COLUMN `first_name` VARCHAR(255) NULL DEFAULT NULL AFTER `password`,
-    ADD COLUMN `last_name` VARCHAR(255) NULL DEFAULT NULL AFTER `first_name`,
-    ADD COLUMN `created_at` TIMESTAMP NULL DEFAULT NULL AFTER `last_name`,
-    ADD COLUMN `updated_at` TIMESTAMP NULL DEFAULT NULL AFTER `created_at`,
-    ADD COLUMN `role` VARCHAR(255) NOT NULL AFTER 'role';
+    ADD COLUMN `last_name`  VARCHAR(255) NULL DEFAULT NULL AFTER `first_name`,
+    ADD COLUMN `created_at` TIMESTAMP    NULL DEFAULT NULL AFTER `last_name`,
+    ADD COLUMN `updated_at` TIMESTAMP    NULL DEFAULT NULL AFTER `created_at`,
+    ADD COLUMN `role`       VARCHAR(255) NOT NULL AFTER 'role';
 
 
 UPDATE `authordb`.`users`
@@ -92,3 +92,35 @@ ALTER TABLE users_roles
 
 INSERT INTO users_roles (users_id, roles_id)
 VALUES ('1', '1');
+
+CREATE TABLE tags
+(
+    `id`   BIGINT       NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+ALTER TABLE `tags`
+    ADD COLUMN `book_id` BIGINT NOT NULL AFTER `name`;
+
+ALTER TABLE `book`
+    ADD COLUMN `tag_id` BIGINT NOT NULL AFTER `authorId`;
+
+
+CREATE TABLE `tags_books`
+(
+    `tags_id`  BIGINT NOT NULL,
+    `books_id` INT    NOT NULL,
+    INDEX `fk_tags_id_idx` (`tags_id` ASC) VISIBLE,
+    INDEX `fk_books_id_idx` (`books_id` ASC) VISIBLE,
+    CONSTRAINT `fk_tags_id`
+        FOREIGN KEY (`tags_id`)
+            REFERENCES `authordb`.`tags` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_books_id`
+        FOREIGN KEY (`books_id`)
+            REFERENCES `authordb`.`book` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION
+);

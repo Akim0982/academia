@@ -1,9 +1,10 @@
 package com.academia.controller;
 
+import com.academia.dto.BookDto;
+import com.academia.mapper.BookMapper;
 import com.academia.model.Book;
 import com.academia.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,39 +15,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
+@RequiredArgsConstructor
 public class BookController {
 
     private final BookService bookService;
-
-    @Autowired
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
+    private final BookMapper bookMapper;
 
     @GetMapping
     public List<Book> findAll() {
         return bookService.findAll();
     }
 
-    @GetMapping("{bookId}")
-    public Book getById(@PathVariable Long bookId) {
-        return bookService.findById(bookId);
+    @GetMapping
+    public BookDto getById(@PathVariable Long id) {
+        Book book = bookService.findById(id);
+        return bookMapper.bookDto(book);
     }
 
     @PostMapping
-    public Book create(@RequestBody Book book) {
-        bookService.save(book);
-        return book;
+    public BookDto create(@RequestBody Book bookDto) {
+        Book book = bookService.create(bookDto);
+        return bookMapper.bookDto(book);
     }
 
-    @Transactional
-    @PutMapping
-    public Book update(@RequestParam Long bookId, @RequestBody Book book) {
-        return bookService.update(bookId, book);
+    @PutMapping("{bookId}")
+    public BookDto update(@RequestParam Long bookId, @Valid @RequestBody Book book1) {
+        Book book = bookService.update(bookId, book1);
+        return bookMapper.bookDto(book);
     }
 
     @DeleteMapping("{bookId}")

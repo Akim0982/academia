@@ -27,23 +27,4 @@ public class User {
     private Date updatedAt;
     @Enumerated(value = EnumType.STRING)
     private Role role;
-
-
-//    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinTable(
-//            name = "users_roles",
-//            joinColumns = @JoinColumn(name = "users_id"),
-//            inverseJoinColumns = @JoinColumn(name = "roles_id")
-//    )
-    //  private Set<Role> roles = new HashSet<>();
-
-//    public void addRole(Role role) {
-//        roles.add(role);
-//        role.getUsers().add(this);
-//    }
-//
-//    public void removeRole(Role role) {
-//        roles.remove(role);
-//        role.getUsers().remove(this);
-//    }
 }

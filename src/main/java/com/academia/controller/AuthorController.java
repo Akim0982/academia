@@ -1,10 +1,11 @@
 package com.academia.controller;
 
 
+import com.academia.dto.AuthorDto;
+import com.academia.mapper.AuthorMapper;
 import com.academia.model.Author;
 import com.academia.service.AuthorService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,14 +21,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/authors")
+@RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService authorService;
-
-    @Autowired
-    public AuthorController(AuthorService authorService) {
-        this.authorService = authorService;
-    }
+    private final AuthorMapper authorMapper;
 
     @GetMapping
     public List<Author> findAll() {
@@ -35,19 +33,21 @@ public class AuthorController {
     }
 
     @GetMapping("{authorId}")
-    public Author getById(@PathVariable Long authorId) {
-        return authorService.findById(authorId);
+    public AuthorDto getById(@PathVariable Long authorId) {
+        Author author = authorService.findById(authorId);
+        return authorMapper.authorDto(author);
     }
 
     @PostMapping
-    public Author create(@Valid @RequestBody Author author) {
-        return authorService.create(author);
+    public AuthorDto create(@Valid @RequestBody Author authorDto) {
+        Author author = authorService.create(authorDto);
+        return authorMapper.authorDto(author);
     }
 
-    @Transactional
     @PutMapping("{authorId}")
-    public Author update(@RequestParam Long authorId, @RequestBody Author author) {
-        return authorService.update(authorId, author);
+    public AuthorDto update(@RequestParam Long authorId, @Valid @RequestBody Author authorDto) {
+        Author author = authorService.update(authorId, authorDto);
+        return authorMapper.authorDto(author);
     }
 
     @DeleteMapping("{authorId}")

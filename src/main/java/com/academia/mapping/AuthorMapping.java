@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 @Component
 @NotNull
 public class AuthorMapping {
-    public Author mapping(Author author, Author existedAuthor) {
+    public Author mapping(@NotNull Author author, @NotNull Author existedAuthor) {
         existedAuthor.setFirstName(author.getFirstName());
         existedAuthor.setLastName(author.getLastName());
         return existedAuthor;

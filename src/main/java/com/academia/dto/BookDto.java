@@ -14,4 +14,5 @@ public class BookDto {
     private Double price;
     private Date createdAt;
     private Date updatedAt;
+
 }
